@@ -4,6 +4,9 @@ target/
 !**/src/main/**/target/
 !**/src/test/**/target/
 
+# Inclure le répertoire target/classes
+!target/classes/
+
 ### STS ###
 .apt_generated
 .classpath
