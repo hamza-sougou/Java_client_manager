@@ -126,7 +126,7 @@ public class ClientsController {
     }
 
     @GetMapping("/delete")
-    public String deleteClient(@RequestParam int id) {
+    public String deleteClient(@RequestParam int id {
         Client client = clientRepo.findById(id).orElse(null);
 
         if(client != null) {
