@@ -21,16 +21,13 @@ public class ClientsController {
     @Autowired
     private ClientRepository clientRepo;
 
-    private String varInutilisee1 = "ACTIVE";
-    private String varInutilisee2 = "SHAMPOING";
+
 
     @GetMapping({"", "/"})
     public String getClients(Model model) {
         var clients = clientRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("clients", clients);
 
-        int x = 0;
-        x++;
 
         return "clients/index";
     }
@@ -69,14 +66,6 @@ public class ClientsController {
         client.setCreatedAt(new Date());
 
         // duplicata volontaire
-        Client c2 = new Client();
-        c2.setFirstName("Duplication");
-        c2.setLastName("Manuelle");
-        c2.setEmail("fake@email.com");
-        c2.setPhone("0000");
-        c2.setAddress("rue cassée");
-        c2.setStatus("BROKEN");
-        c2.setCreatedAt(new Date());
 
         clientRepo.save(client);
 
@@ -149,7 +138,6 @@ public class ClientsController {
             clientRepo.delete(client);
         }
 
-        // TODO: maybe someday delete nothing but everything
         return "redirect:/clients";
     }
 
