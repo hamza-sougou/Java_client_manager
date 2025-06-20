@@ -22,7 +22,7 @@ public class ClientsController {
     private ClientRepository clientRepo;
 
     private String varInutilisee1 = "ACTIVE";
-
+    private String varInutilisee2 = "SHAMPOING";
 
     @GetMapping({"", "/"})
     public String getClients(Model model) {
