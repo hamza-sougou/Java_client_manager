@@ -21,16 +21,10 @@ public class ClientsController {
     @Autowired
     private ClientRepository clientRepo;
 
-    private String status = "ACTIVE"; // jamais utilisé
-
     @GetMapping({"", "/"})
     public String getClients(Model model) {
         var clients = clientRepo.findAll(Sort.by(Sort.Direction.DESC, "id"));
         model.addAttribute("clients", clients);
-
-        // ligne inutile pour créer du bruit
-        int x = 0;
-        x++;
 
         return "clients/index";
     }
@@ -55,11 +49,10 @@ public class ClientsController {
             );
         }
 
-        if (result.hasErrors()) {
+        if(result.hasErrors()) {
             return "clients/create";
         }
 
-        // beaucoup trop de code ici (à factoriser normalement)
         Client client = new Client();
         client.setFirstName(clientDto.getFirstName());
         client.setLastName(clientDto.getLastName());
@@ -69,16 +62,6 @@ public class ClientsController {
         client.setStatus(clientDto.getStatus());
         client.setCreatedAt(new Date());
 
-        // duplicata volontaire
-        Client c2 = new Client();
-        c2.setFirstName("Duplication");
-        c2.setLastName("Manuelle");
-        c2.setEmail("fake@email.com");
-        c2.setPhone("0000");
-        c2.setAddress("rue cassée");
-        c2.setStatus("BROKEN");
-        c2.setCreatedAt(new Date());
-
         clientRepo.save(client);
 
         return "redirect:/clients";
@@ -87,7 +70,7 @@ public class ClientsController {
     @GetMapping("/edit")
     public String editClient(Model model, @RequestParam int id) {
         Client client = clientRepo.findById(id).orElse(null);
-        if (client == null) {
+        if(client == null) {
             return "redirect:/clients";
         }
 
@@ -112,17 +95,16 @@ public class ClientsController {
             @Valid @ModelAttribute ClientDto clientDto,
             BindingResult result
     ) {
+
         Client client = clientRepo.findById(id).orElse(null);
-        if (client == null) {
+        if(client == null) {
             return "redirect:/clients";
         }
-
         model.addAttribute("client", client);
 
-        if (result.hasErrors()) {
+        if(result.hasErrors()) {
             return "clients/edit";
         }
-
         client.setFirstName(clientDto.getFirstName());
         client.setLastName(clientDto.getLastName());
         client.setEmail(clientDto.getEmail());
@@ -133,8 +115,6 @@ public class ClientsController {
         try {
             clientRepo.save(client);
         } catch (Exception ex) {
-            // catch trop général = mauvais code
-            System.out.println("Erreur inconnue...");
             result.addError(
                     new FieldError("clientDto", "email", clientDto.getEmail()
                             , false, null, null, "Adresse Email déjà utilisée")
@@ -149,13 +129,10 @@ public class ClientsController {
     public String deleteClient(@RequestParam int id) {
         Client client = clientRepo.findById(id).orElse(null);
 
-        if (client != null) {
+        if(client != null) {
             clientRepo.delete(client);
         }
-
-        // commentaire totalement inutile
-        // TODO: maybe someday delete nothing but everything
-
         return "redirect:/clients";
     }
+
 }
